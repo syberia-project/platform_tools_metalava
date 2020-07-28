@@ -234,7 +234,10 @@ class ApiLint(private val codebase: Codebase, private val oldCodebase: Codebase?
     }
 
     override fun skip(item: Item): Boolean {
-        return super.skip(item) || item is ClassItem && !isInteresting(item)
+        return super.skip(item) ||
+            item is ClassItem && !isInteresting(item) ||
+            item is MethodItem && !isInteresting(item.containingClass()) ||
+            item is FieldItem && !isInteresting(item.containingClass())
     }
 
     // The previous Kotlin interop tests are also part of API lint now (though they can be
